@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,8 +16,32 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+            $middleware->append(\App\Http\Middleware\SetLocale::class);
 
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+//        $exceptions->render(function (ModelNotFoundException $e, $request) {
+//            if ($request->is('api/*')) {
+//                return response()->json([
+//                    'message' => 'Resource not found',
+//                    'code' => 'NOT_FOUND',
+//                ], 404);
+//            }
+//
+//            return null; // خلي الويب ياخد مساره الطبيعي
+//        });
+//
+//        $exceptions->render(function (NotFoundHttpException $e, $request) {
+//            if ($request->is('api/*')) {
+//                return response()->json([
+//                    'message' => $e->getMessage(),
+//                    'code' => 'ROUTE_NOT_FOUND',
+//                ], 404);
+//            }
+//
+//            return null;
+//        });
+
+    })->withSchedule(function (Schedule $schedule):void {
+        $schedule->command('course-runs:close-expired')->everySecond();
     })->create();
