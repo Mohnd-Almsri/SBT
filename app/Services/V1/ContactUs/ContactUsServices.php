@@ -9,7 +9,7 @@ use App\Models\CourseRun;
 
 class ContactUsServices
 {
-    public function create(array $data): BookingRequest
+    public function create(array $data): Contact
     {
        return Contact::create($data);
     }

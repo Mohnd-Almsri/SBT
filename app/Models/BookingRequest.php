@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\BookingRequestStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -30,4 +31,8 @@ class BookingRequest extends Model
     {
         return $this->belongsTo(CourseRun::class);
     }
+    public function scopeNew(Builder $query) :Builder {
+        return $query->where('status',BookingRequestStatus::New);
+    }
+
 }

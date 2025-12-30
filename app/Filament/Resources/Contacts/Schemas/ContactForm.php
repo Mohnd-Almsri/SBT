@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Contacts\Schemas;
 
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -11,12 +12,27 @@ class ContactForm
     {
         return $schema
             ->components([
-            textInput::make('first_name')->label('First Name')->required(),
-            textInput::make('last_name')->label('Last Name')->required(),
-            textInput::make('email')->label('Email')->required(),
-            textInput::make('phone')->label('Phone')->required(),
-            textInput::make('subject')->label('Subject')->required(),
-            textInput::make('message')->label('Message')->required()->columnSpanFull(),
-            ])->columns(2);
+                TextInput::make('first_name')
+                    ->label('First Name')
+                    ->required()
+                    ->maxLength(255),
+
+                TextInput::make('last_name')
+                    ->label('Last Name')
+                    ->required()
+                    ->maxLength(255),
+
+                TextInput::make('phone')
+                    ->label('Phone')
+                    ->required()
+                    ->maxLength(50),
+
+                Textarea::make('message')
+                    ->label('Message')
+                    ->required()
+                    ->rows(6)
+                    ->columnSpanFull(),
+            ])
+            ->columns(2);
     }
 }

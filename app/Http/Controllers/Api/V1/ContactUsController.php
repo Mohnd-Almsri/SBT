@@ -17,8 +17,8 @@ class ContactUsController extends Controller
         // هلق مؤقتًا بدون FormRequest — بعد شوي منعمل StoreBookingRequestRequest
         $contact = $this->service->create($request->all());
 
-        return ApiResponse::success(data:[
-            'contact' => $contact,
-        ], message: 'Contact report submitted', status: 201);
+        return ApiResponse::success(data:
+             [$contact]
+        , message: 'Contact report submitted', status: 201);
     }
 }

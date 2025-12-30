@@ -9,6 +9,7 @@ use App\Filament\Resources\Contacts\Pages\ViewContact;
 use App\Filament\Resources\Contacts\Schemas\ContactForm;
 use App\Filament\Resources\Contacts\Schemas\ContactInfolist;
 use App\Filament\Resources\Contacts\Tables\ContactsTable;
+use App\Models\Category;
 use App\Models\Contact;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -23,11 +24,19 @@ class ContactResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Envelope;
 
     protected static ?string $recordTitleAttribute = 'Contact';
+
+    protected static null|string|\UnitEnum $navigationGroup = 'Inbox';
+    protected static ?int $navigationSort = 10;
     protected static ?string $navigationLabel = 'Contact Messages';
+
     protected static ?string $modelLabel = 'Contact Message';
     protected static ?string $pluralModelLabel = 'Contact Messages';
 
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Contact::unRead()->count();
+    }
     public static function form(Schema $schema): Schema
     {
         return ContactForm::configure($schema);
@@ -54,9 +63,9 @@ class ContactResource extends Resource
     {
         return [
             'index' => ListContacts::route('/'),
-            'create' => CreateContact::route('/create'),
+//            'create' => CreateContact::route('/create'),
             'view' => ViewContact::route('/{record}'),
-            'edit' => EditContact::route('/{record}/edit'),
+//            'edit' => EditContact::route('/{record}/edit'),
         ];
     }
 }

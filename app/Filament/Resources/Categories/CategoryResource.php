@@ -25,7 +25,13 @@ class CategoryResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     // أفضل خيار حاليًا بما أن name JSON
-    protected static ?string $recordTitleAttribute = 'slug';
+    protected static null|string|\UnitEnum $navigationGroup = 'Courses';
+    protected static ?int $navigationSort = 10;
+    protected static ?string $navigationLabel = 'Categories';
+
+//    protected static ?string $recordTitleAttribute = 'slug';
+
+
 
     public static function getEloquentQuery(): Builder
     {

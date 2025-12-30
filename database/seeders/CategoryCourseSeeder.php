@@ -38,7 +38,6 @@ class CategoryCourseSeeder extends Seeder
                     'ar' => "وصف بسيط للفئة رقم {$i}",
                     'en' => "Simple description for category {$i}",
                 ],
-                'slug' => Str::slug("category-{$i}"),
                 // إذا عندك sort_order بالكاتيجوري
                 'sort_order' => $i,
                 'is_active' => (bool) random_int(0, 1),

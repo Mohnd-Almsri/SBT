@@ -9,6 +9,7 @@ use App\Filament\Resources\BookingRequests\Schemas\BookingRequestForm;
 use App\Filament\Resources\BookingRequests\Schemas\BookingRequestInfolist;
 use App\Filament\Resources\BookingRequests\Tables\BookingRequestsTable;
 use App\Models\BookingRequest;
+use App\Models\Category;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -27,7 +28,13 @@ class BookingRequestResource extends Resource
     protected static ?string $navigationLabel = 'Booking Requests';
     protected static ?string $modelLabel = 'Booking Request';
     protected static ?string $pluralModelLabel = 'Booking Requests';
+    protected static string|\UnitEnum|null $navigationGroup = 'Bookings';
+    protected static ?int $navigationSort = 10;
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) BookingRequest::new()->count();
+    }
     public static function form(Schema $schema): Schema
     {
         // بما إننا ما بدنا create/edit من الأدمن حالياً، غالباً ما رح تُستعمل
