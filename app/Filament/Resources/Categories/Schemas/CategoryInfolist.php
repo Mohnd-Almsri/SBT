@@ -50,11 +50,6 @@ class CategoryInfolist
                     Section::make('Details')
                         ->columns(2)
                         ->schema([
-                            TextEntry::make('slug')
-                                ->label('Slug')
-                                ->copyable()
-                                ->copyMessage('Slug copied')
-                                ->placeholder('-'),
 
                             TextEntry::make('sort_order')
                                 ->label('Sort Order')

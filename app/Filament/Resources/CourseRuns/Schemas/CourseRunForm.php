@@ -55,7 +55,7 @@ class CourseRunForm
                         ->timezone('Asia/Damascus')
                         ->seconds(false)
                         ->afterOrEqual('starts_at')
-                        ->nullable(),
+                        ->required(),
 
 //                    TextInput::make('capacity')
 //                        ->label('Capacity')

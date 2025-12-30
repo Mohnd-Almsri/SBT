@@ -29,11 +29,13 @@ class CourseForm
                                 ->schema([
                                     TextInput::make('title.ar')
                                         ->label('Title (AR)')
+                                        ->placeholder('عنوان الكورس')
                                         ->required()
                                         ->maxLength(255),
 
                                     TextInput::make('title.en')
                                         ->label('Title (EN)')
+                                        ->placeholder('Course title')
                                         ->required()
                                         ->maxLength(255),
                                 ]),
@@ -43,13 +45,15 @@ class CourseForm
                                 ->schema([
                                     Textarea::make('description.ar')
                                         ->label('Description (AR)')
+                                        ->placeholder('وصف الكورس')
                                         ->rows(6)
-                                        ->nullable(),
+                                        ->required(),
 
                                     Textarea::make('description.en')
                                         ->label('Description (EN)')
+                                        ->placeholder('Course description')
                                         ->rows(6)
-                                        ->nullable(),
+                                        ->required(),
                                 ]),
 
                             Section::make('Details')
@@ -57,27 +61,29 @@ class CourseForm
                                 ->schema([
                                     Select::make('category_id')
                                         ->label('Category')
+                                        ->placeholder('اختر التصنيف')
                                         ->relationship(
                                             name: 'category',
-                                            titleAttribute: 'name', // حتى لو JSON، الليبل الحقيقي جاي من callback
+                                            titleAttribute: 'name',
                                             modifyQueryUsing: fn (Builder $query) => $query
-                                                ->select(['id', 'name', 'slug'])
-//                                                ->where('is_active', true) // اختياري: بس الفئات الفعالة
+                                                ->select(['id', 'name'])
                                                 ->orderByDesc('id')
                                         )
                                         ->searchable()
                                         ->preload()
                                         ->getOptionLabelFromRecordUsing(function (Model $record): string {
                                             /** @var Category $record */
-                                            return $record->getTranslation('name', app()->getLocale()) ?: ($record->slug ?? "#{$record->id}");
+                                            return $record->getTranslation('name', app()->getLocale());
                                         })
                                         ->required(),
 
                                     TextInput::make('duration_hours')
                                         ->label('Duration (hours)')
+                                        ->placeholder('مثال: 12')
                                         ->numeric()
                                         ->minValue(1)
-                                        ->suffix('h'),
+                                        ->suffix('h')
+                                        ->required(),
 
                                     Toggle::make('is_active')
                                         ->label('Active')
@@ -98,7 +104,7 @@ class CourseForm
                         ->schema([
                             SpatieMediaLibraryFileUpload::make('cover')
                                 ->label('Cover')
-                                ->helperText('Upload a single cover image . Max size: 4MB.')
+                                ->helperText('Upload a single cover image. Max size: 4MB.')
                                 ->collection(Course::MEDIA_COLLECTION_COVER)
                                 ->disk('public')
                                 ->image()
@@ -107,7 +113,7 @@ class CourseForm
 
                             SpatieMediaLibraryFileUpload::make('gallery')
                                 ->label('Gallery')
-                                ->helperText('Upload multiple images for the gallery. You can reorder them. Max size per image: 4MB.')
+                                ->helperText('Upload multiple images for the gallery. You can reorder them.')
                                 ->collection(Course::MEDIA_COLLECTION_GALLERY)
                                 ->disk('public')
                                 ->image()

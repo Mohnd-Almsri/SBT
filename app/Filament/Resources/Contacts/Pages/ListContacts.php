@@ -15,7 +15,7 @@ class ListContacts extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+//            CreateAction::make(),
         ];
     }
     public function getTabs(): array
@@ -25,12 +25,12 @@ class ListContacts extends ListRecords
                 ->icon('heroicon-o-check-circle')
                 ->badge(Contact::count()),
 
-            'Read' => Tab::make('Active')
+            'Read' => Tab::make('Read')
                 ->icon('heroicon-o-check-circle')
                 ->modifyQueryUsing(fn ($query) => $query->where('is_read', 1))
                 ->badge(Contact::where('is_read', 1)->count())
                 ->badgeColor('success'),
-            'UnRead' => Tab::make('Inactive')
+            'UnRead' => Tab::make('UnRead')
                 ->icon('heroicon-o-x-circle')
                 ->modifyQueryUsing(fn ($query) => $query->where('is_read', 0))
                 ->badge(Contact::where('is_read', 0)->count())

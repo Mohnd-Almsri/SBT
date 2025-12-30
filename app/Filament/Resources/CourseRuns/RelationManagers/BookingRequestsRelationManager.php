@@ -17,7 +17,7 @@ class BookingRequestsRelationManager extends RelationManager
     {
         return $table
             ->headerActions([
-                CreateAction::make(),
+//                CreateAction::make(),
             ]);
     }
 }

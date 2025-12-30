@@ -1,0 +1,9 @@
+providers = ["php"]
+
+[phases.setup]
+nixPkgs = [
+  "php82Extensions.intl",
+  "php82Extensions.zip",
+  "php82Extensions.exif"
+]
+

@@ -29,6 +29,11 @@ class CourseResource extends Resource
      * حتى لو title JSON، Filament ما رح يستخدمه مباشرة
      * لأننا مخصصين العرض بالـ table / infolist
      */
+
+    protected static null|string|\UnitEnum $navigationGroup = 'Courses';
+    protected static ?int $navigationSort = 20;
+//    protected static ?string $navigationLabel = 'Categories';
+
     protected static ?string $recordTitleAttribute = 'title';
 
     public static function getEloquentQuery(): Builder

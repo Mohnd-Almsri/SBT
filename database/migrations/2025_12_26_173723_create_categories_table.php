@@ -13,7 +13,7 @@ return new class extends Migration {
 
             $table->json('name');                // {"ar":"...", "en":"..."}
             $table->json('description');                // {"ar":"...", "en":"..."}
-            $table->string('slug')->unique();    // url friendly
+//            $table->string('slug')->unique();    // url friendly
             $table->unsignedInteger('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
 

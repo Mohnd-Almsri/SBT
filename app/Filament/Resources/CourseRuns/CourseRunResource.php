@@ -26,6 +26,9 @@ class CourseRunResource extends Resource
 
     // intentionally removed recordTitleAttribute
     // title will be handled in table / infolist
+    protected static null|string|\UnitEnum $navigationGroup = 'Courses';
+    protected static ?int $navigationSort = 30;
+//    protected static ?string $navigationLabel = 'Categories';
 
 
     public static function getEloquentQuery(): Builder

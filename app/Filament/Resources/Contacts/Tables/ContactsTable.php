@@ -11,6 +11,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 
 class ContactsTable
 {
@@ -20,27 +21,30 @@ class ContactsTable
             ->columns([
                 Tables\Columns\IconColumn::make('is_read')
                     ->label('Read')
-                    ->boolean(),
+                    ->boolean()
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('first_name')
                     ->label('First Name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('last_name')
                     ->label('Last Name')
-                    ->searchable(),
-
-                Tables\Columns\TextColumn::make('email')
                     ->searchable()
-                    ->copyable(),
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('phone')
+                    ->label('Phone')
+                    ->searchable()
+                    ->copyable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('subject')
-                    ->limit(40)
-                    ->placeholder('-')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('message')
+                    ->label('Message')
+                    ->limit(50)
+                    ->wrap()
+                    ->placeholder('-'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Received')
@@ -53,12 +57,13 @@ class ContactsTable
                     ->label('Read status'),
             ])
             ->actions([
-               ViewAction::make(),
+                ViewAction::make(),
+
                 Action::make('mark_read')
                     ->label('Mark read')
                     ->icon('heroicon-o-check')
                     ->visible(fn (Contact $record) => ! $record->is_read)
-                    ->action(function (Contact $record) {
+                    ->action(function (Contact $record): void {
                         $record->update([
                             'is_read' => true,
                             'read_at' => now(),
@@ -69,7 +74,7 @@ class ContactsTable
                     ->label('Mark unread')
                     ->icon('heroicon-o-arrow-uturn-left')
                     ->visible(fn (Contact $record) => $record->is_read)
-                    ->action(function (Contact $record) {
+                    ->action(function (Contact $record): void {
                         $record->update([
                             'is_read' => false,
                             'read_at' => null,
@@ -83,10 +88,13 @@ class ContactsTable
                     BulkAction::make('mark_read_bulk')
                         ->label('Mark read')
                         ->icon('heroicon-o-check')
-                        ->action(function ($records) {
-                            foreach ($records as $record) {
-                                $record->update(['is_read' => true, 'read_at' => now()]);
-                            }
+                        ->action(function (Collection $records): void {
+                            Contact::query()
+                                ->whereIn('id', $records->modelKeys())
+                                ->update([
+                                    'is_read' => true,
+                                    'read_at' => now(),
+                                ]);
                         }),
 
                     DeleteBulkAction::make(),

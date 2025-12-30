@@ -9,7 +9,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class CategoryForm
 {
@@ -18,58 +17,42 @@ class CategoryForm
         return $schema->schema([
             Section::make('Category')
                 ->schema([
-                    // بدل Tabs: حقول الترجمة جنب بعض
                     Section::make('Translations')
                         ->columns(2)
                         ->columnSpanFull()
                         ->schema([
                             TextInput::make('name.ar')
                                 ->label('Name (AR)')
+                                ->placeholder('اسم التصنيف')
                                 ->required()
                                 ->maxLength(255)
-                                ->live(onBlur: true)
-                                ->afterStateUpdated(function (?string $state, callable $set, callable $get) {
-                                    // إذا slug فاضي وما في EN، خليه يتولد من AR كحل احتياطي
-                                    if (blank($get('slug')) && blank(data_get($get('name'), 'en')) && filled($state)) {
-                                        $set('slug', Str::slug($state));
-                                    }
-                                }),
+                                ->lazy(),
 
                             TextInput::make('name.en')
                                 ->label('Name (EN)')
+                                ->placeholder('Category name')
                                 ->required()
                                 ->maxLength(255)
-                                ->live(onBlur: true)
-                                ->afterStateUpdated(function (?string $state, callable $set) {
-                                    // الأفضل توليد slug من الإنكليزي
-                                    if (filled($state)) {
-                                        $set('slug', Str::slug($state));
-                                    }
-                                }),
+                                ->lazy(),
 
-                            // إذا عندك description بالكاتيجوري (JSON)
                             Textarea::make('description.ar')
                                 ->label('Description (AR)')
+                                ->placeholder('وصف التصنيف')
                                 ->rows(4)
                                 ->columnSpan(1),
 
                             Textarea::make('description.en')
                                 ->label('Description (EN)')
+                                ->placeholder('Category description')
                                 ->rows(4)
                                 ->columnSpan(1),
                         ]),
 
                     Section::make('Details')
                         ->schema([
-                            TextInput::make('slug')
-                                ->label('Slug')
-                                ->helperText('URL-friendly identifier. Auto-generated from EN (fallback AR).')
-                                ->required()
-                                ->maxLength(255)
-                                ->unique(ignoreRecord: true),
-
                             TextInput::make('sort_order')
                                 ->label('Sort Order')
+                                ->placeholder('0')
                                 ->helperText('Lower number appears first.')
                                 ->numeric()
                                 ->default(0),
