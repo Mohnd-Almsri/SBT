@@ -66,15 +66,14 @@ class CourseForm
                                             name: 'category',
                                             titleAttribute: 'name',
                                             modifyQueryUsing: fn (Builder $query) => $query
-                                                ->select(['id', 'name', 'slug'])
+                                                ->select(['id', 'name'])
                                                 ->orderByDesc('id')
                                         )
                                         ->searchable()
                                         ->preload()
                                         ->getOptionLabelFromRecordUsing(function (Model $record): string {
                                             /** @var Category $record */
-                                            return $record->getTranslation('name', app()->getLocale())
-                                                ?: ($record->slug ?? "#{$record->id}");
+                                            return $record->getTranslation('name', app()->getLocale());
                                         })
                                         ->required(),
 

@@ -68,6 +68,8 @@ class CourseRun extends Model
             ->where('is_active', true)
             ->where('status', CourseRunStatus::Open)
             ->whereNotNull('ends_at')
-            ->where('ends_at', '>', now());
+            ->where('ends_at', '>', now())
+            ->whereHas('course', fn($q)=> $q->ActiveWithCategory()
+            );
     }
 }
