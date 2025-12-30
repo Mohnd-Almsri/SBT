@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ContactUsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CourseController;
@@ -14,12 +15,8 @@ Route::prefix('v1')->group(function () {
     Route::get('/courses/featured', [CourseController::class, 'showFeaturedCourses']);
     Route::get('/courses/{course}', [CourseController::class, 'show']);
 
-    Route::get('/course-runs', [CourseRunController::class, 'index']);
-    Route::get('/time',function (){
-      return now();
-    });
-    Route::get('/course-runs/{courseRun}', [CourseRunController::class, 'show']);
 
     // Booking (بدون auth)
     Route::post('/booking-requests', [BookingRequestController::class, 'store']);
+    Route::post('/contact-us', [ContactUsController::class, 'store']);
 });
