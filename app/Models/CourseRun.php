@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BookingRequestStatus;
 use App\Enums\CourseRunStatus;
 use App\Observers\CourseRunObserver;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,6 +51,29 @@ class CourseRun extends Model
     {
         return $query->where('is_active', true);
     }
+
+    public function scopeRealActive(Builder $query): Builder
+    {
+        return $query->where('is_active', true)
+            ->where('status',CourseRunStatus::Open)
+            ->whereHas('course', fn($q)=> $q->ActiveWithCategory()
+            );
+    }
+
+    public function scopeNotRealActive(Builder $query): Builder
+    {
+        return $query->where(function (Builder $q) {
+            $q->where('is_active', false)
+                ->where('status','!=',CourseRunStatus::Open)
+                ->orWhereHas('course', function (Builder $course) {
+                    $course->where('is_active', false)
+                        ->orWhereHas('category', fn (Builder $cat) => $cat->where('is_active', false))
+                        ->orWhereDoesntHave('category');
+                })
+                ->orWhereDoesntHave('course');
+        });
+    }
+
 
     public function scopeOpen(Builder $query): Builder
     {

@@ -115,8 +115,8 @@ class CategoryCourseSeeder extends Seeder
 
                     CourseRun::create([
                         'course_id' => $course->id,
-                        'starts_at' => $startsAt,
-                        'ends_at' => now()->addMinutes(2),
+                        'starts_at' => now(),
+                        'ends_at' => now()->addDays(random_int(1,7)),
                         'capacity' => random_int(10, 50),
                         'price' => random_int(0, 1) ? random_int(20, 150) : 0,
                         'status' => fake()->randomElement(['open', 'closed', 'cancelled', 'draft']),
