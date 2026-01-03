@@ -12,7 +12,7 @@ class CourseService
     {
         $query = Course::activeWithCategory()->with([
             'category',
-            'courseRuns' => fn ($q) => $q->public()->orderByDesc('starts_at'),
+            'courseRuns' => fn ($q) => $q->bookable()->orderByDesc('starts_at'),
         ]);
 
         if (!empty($filters['category_id'])) {
